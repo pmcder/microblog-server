@@ -5,11 +5,20 @@ const replyModel = require('../models/replyModel');
 const Reply = replyModel.getReply();
 const VerifyToken = require('../jwt/jwt');
 const { reply } = require('../models');
+const blogModel = require('../models/index');
+const blog = blogModel.blogPost.getBlog();
+const NotificationModel = require('../models/notificationModel');
+const Notification = NotificationModel.getNotification();
 
 router.use(bodyParser.urlencoded({ extended: true }));
 
 /**
- * adds a new reply to the blog post with passed postId
+ * Adds a new reply to the blog post with passed postId.
+ * Creates a new notification for the author of the post and
+ * saves to the notifications collection.
+ * 
+ * TODO : 
+ * change author from userName to _id
  */
 router.post('/',async(req,res)=>{
     
@@ -21,6 +30,19 @@ router.post('/',async(req,res)=>{
     author : req.body.author
     });
     reply.save();
+
+    let author = await blog.findById(req.body.postId);
+    console.log(author.author);
+
+    let notification = new Notification({
+        date : Date.now(),
+        message : "you have a new reply on your post !",
+        owner : author.author,
+        read : false
+    })
+
+    notification.save();
+
     res.status(201).send(); 
 });
 

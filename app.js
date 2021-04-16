@@ -23,12 +23,14 @@ app.use(cors());
 
 var blogController = require('./blog/blogController');
 var replyController = require('./blog/replyController');
+var notificationController = require('./notifications/notificationController');
 
 var routes = require('./routes/index');
 app.use('/', routes);
 
 app.use('/api/blog', blogController);
 app.use('/api/replies', replyController);
+app.use('/api/notifications',notificationController);
 
 app.use(function(req, res) {
     res.status(404);

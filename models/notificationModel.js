@@ -13,7 +13,7 @@ const notificationSchema = new Schema({
 },
 {collection: 'notifications'});
 
-module.exports.getBlog = ()=>{
+module.exports.getNotification = ()=>{
     model = Mongoose.model('notificationSchema',notificationSchema);
     return model;
 };
